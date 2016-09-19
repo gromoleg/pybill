@@ -183,6 +183,9 @@ class DurationParser(object):
     def parse_duration(data, round_duration=False, aggressive_round=False):
         # bad code section, sorry for my regexp
         days = int('день' in data)
+        if not days:
+            days = re.match('(?:.+ |)(\d+) дні', data)
+            days = int(days.groups()[0]) if days else 0
         hours = re.match('(?:.+ |)(\d+) годин', data)
         hours = int(hours.groups()[0]) if hours else 0
         minutes = re.match('(?:.+ |)(\d+) хвилин', data)
