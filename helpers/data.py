@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 
 
 class LittleSpider(object):
-    def __init__(self, username=c.username, password=c.password, domain=c.BILL_DOMAIN):
+    def __init__(self, username=c.BILL_USERNAME, password=c.BILL_PASSWORD, domain=c.BILL_DOMAIN):
         self.username = username
         self.password = password
         self.domain = domain
@@ -40,7 +40,7 @@ class LittleSpider(object):
         self.bill_id = data[5].text.lstrip()
 
     def get_logs(self,
-                 months=18,
+                 months=c.MAX_MONTHS,
                  randomize_day=False,
                  hide_ip=False,
                  hide_time=False,
@@ -61,6 +61,8 @@ class LittleSpider(object):
         if not all((randomize_day, hide_ip, hide_time, hide_date, hide_duration, hide_sent, hide_received, hide_plan,
                     hide_server, round_duration, round_sent, round_received, aggressive_round)) and not keep_default:
             raise ValueError('You should review LittleSpider.get_logs params to continue...')
+        if not self.name:
+            self.login()
         to_date = date.today()
         if randomize_day:
             to_date = to_date.replace(day=random.randint(1, to_date.day))
